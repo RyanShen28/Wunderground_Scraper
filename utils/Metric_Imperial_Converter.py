@@ -1,3 +1,5 @@
+import re
+class convert:
     precision = 2
     supported_systems = ["metric", "imperial"]
     float_part_of_string = r"-?\d*\.\d+|-?\d+"
@@ -85,6 +87,7 @@
         for dict in dict_list:
             converted = {}
             for key, value in dict.items():
+
                 if key == 'Date':
                     converted['Date'] = value
                 if key == 'Time':
@@ -98,15 +101,17 @@
                 if key == 'Wind':
                     converted['Wind'] = value
                 if key == 'Wind Speed':
-                    converted['Wind Speed'] = self.speed(value)
-                if key == 'Wind Gust':
+                    converted['Wind_Speed'] = self.speed(value)
+                if key == 'Wind_Gust':
                     converted['Gust'] = self.speed(value)
                 if key == 'Pressure':
                     converted['Pressure'] = self.pressure(value)
-                if key == 'Precip.':
+                if key == 'Precip':
                     converted['Precip_Rate'] = self.precipitation(value)
                 if key == 'Condition':
                     converted['Condition'] = value
+
+
 
 
             converted_list.append(converted)
