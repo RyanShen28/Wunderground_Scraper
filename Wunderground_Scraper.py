@@ -6,7 +6,7 @@ import config
 from util.Metric_Imperial_Converter import convert
 from util.Parser import Parser
 from util.Utils import Utils
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError
 p = sync_playwright().start()
 browser = p.chromium.launch(headless=False)
 
@@ -36,6 +36,7 @@ def scrape(url):
     global START_DATE
     global END_DATE
     global UNITS
+    Timeout_flag = False
     file_name = f'{url.split("/")[-2]}.csv'
     date_url_list = Utils.date_url_generator(url, START_DATE, END_DATE)
 
@@ -55,15 +56,27 @@ def scrape(url):
                 html_data_table = False
                 while not html_data_table:
                     page = browser.new_page()
-                    page.goto(url, timeout = 30000, wait_until="domcontentloaded")
+                    page.goto(url, wait_until="domcontentloaded")
+                    print("pass")
 
-                    page.wait_for_selector('#inner-content > div.region-content-main > div.row > div:nth-child(5) > div:nth-child(1) > div > lib-city-history-observation > div > div.observation-table.ng-star-inserted > table > thead')
+                    try:
+                        page.wait_for_selector('#inner-content > div.region-content-main > div.row > div:nth-child(5) > div:nth-child(1) > div > lib-city-history-observation > div > div.observation-table.ng-star-inserted > table > thead', timeout=5000)
+                    except TimeoutError:
+                        Timeout_flag = True
+                        break
+
+
 
                     html_string = page.content()
                     doc = lh.fromstring(html_string)
                     page.close()
 
                     html_data_table = doc.xpath('/html/body/app-root/app-history/one-column-layout/wu-header/sidenav/mat-sidenav-container/mat-sidenav-content/div[2]/section/div[2]/div[1]/div[5]/div[1]/div/lib-city-history-observation/div/div[2]/table/tbody')
+                if Timeout_flag:
+                    Timeout_flag=False
+                    print("No data on this day / Timeout Error")
+                    page.close()
+                    continue
                 data_rows = Parser.parse_html_table(interval, dates, html_data_table)
                 #conversions done here
                 converter = convert(UNITS)
