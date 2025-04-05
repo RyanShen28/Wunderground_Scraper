@@ -41,13 +41,13 @@ def scrape(url):
     date_url_list = Utils.date_url_generator(url, START_DATE, END_DATE)
 
     with open(file_name, 'a+', newline='') as csvfile:
-        fieldnames = ['Date', 'Time',	'Temperature',	'Dew_Point', 'Humidity','Wind',	'Wind Speed',	'Wind Gust', 'Pressure', 'Precip.',	'Condition']
+        fieldnames = ['Date', 'Time',	'Temperature',	'Dew_Point', 'Humidity','Wind',	'Wind_Speed',	'Gust', 'Pressure', 'Precip_Rate',	'Condition']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         if UNITS == "metric":
-            writer.writerow({'Date': 'Date', 'Time': 'Time', 'Temperature': 'Temperature_C', 'Dew_Point': 'Dew_Point_C', 'Humidity': 'Humidity_%',	'Wind': 'Wind Direction',	'Wind Speed': 'Speed in km/h',	'Wind Gust': 'Gust km/h', 'Pressure': 'Pressure in hPa',	'Precip.': 'Precipitation Rate in mm', 'Condition' : 'Condition'})
+            writer.writerow({'Date': 'Date', 'Time': 'Time', 'Temperature': 'Temperature_C', 'Dew_Point': 'Dew_Point_C', 'Humidity': 'Humidity_%',	'Wind': 'Wind Direction',	'Wind_Speed': 'Speed in km/h',	'Gust': 'Gust km/h', 'Pressure': 'Pressure in hPa',	'Precip_Rate': 'Precipitation Rate in mm', 'Condition' : 'Condition'})
         elif UNITS == "imperial": 
-            writer.writerow({'Date': 'Date', 'Time': 'Time', 'Temperature': 'Temperature_F', 'Dew_Point': 'Dew_Point_F',	'Humidity': 'Humidity_%',	'Wind': 'Wind Direction',	'Wind Speed': 'Speed in mp/h',	'Gust': 'Gust mp/h',	'Pressure': 'Pressure in inHg',	'Precip.': 'Precipitation Rate in inches',	'Condition': 'Condition',})
+            writer.writerow({'Date': 'Date', 'Time': 'Time', 'Temperature': 'Temperature_F', 'Dew_Point': 'Dew_Point_F',	'Humidity': 'Humidity_%',	'Wind': 'Wind Direction',	'Wind_Speed': 'Speed in mp/h',	'Gust': 'Gust mp/h',	'Pressure': 'Pressure in inHg',	'Precip_Rate': 'Precipitation Rate in inches',	'Condition': 'Condition',})
         else:
             raise Exception("UNITS must be metric or imperial")
         
@@ -57,10 +57,9 @@ def scrape(url):
                 while not html_data_table:
                     page = browser.new_page()
                     page.goto(url, wait_until="domcontentloaded")
-                    print("pass")
 
                     try:
-                        page.wait_for_selector('#inner-content > div.region-content-main > div.row > div:nth-child(5) > div:nth-child(1) > div > lib-city-history-observation > div > div.observation-table.ng-star-inserted > table > thead', timeout=5000)
+                        page.wait_for_selector('#inner-content > div.region-content-main > div.row > div:nth-child(5) > div:nth-child(1) > div > lib-city-history-observation > div > div.observation-table.ng-star-inserted > table > thead', timeout=2700)
                     except TimeoutError:
                         Timeout_flag = True
                         break
