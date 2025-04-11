@@ -100,7 +100,7 @@ class convert:
                     converted['Humidity'] = self.humidity(value)
                 if key == 'Wind':
                     converted['Wind'] = value
-                if key == 'Wind Speed':
+                if key == 'Wind_Speed':
                     converted['Wind_Speed'] = self.speed(value)
                 if key == 'Wind_Gust':
                     converted['Gust'] = self.speed(value)
