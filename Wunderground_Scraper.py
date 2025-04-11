@@ -59,7 +59,7 @@ def scrape(url):
                     page.goto(url, wait_until="domcontentloaded")
 
                     try:
-                        page.wait_for_selector('#inner-content > div.region-content-main > div.row > div:nth-child(5) > div:nth-child(1) > div > lib-city-history-observation > div > div.observation-table.ng-star-inserted > table > thead', timeout=2700)
+                        page.wait_for_selector('#inner-content > div.region-content-main > div.row > div:nth-child(5) > div:nth-child(1) > div > lib-city-history-observation > div > div.observation-table > table > thead > tr > th.mat-sort-header.mat-mdc-header-cell.mdc-data-table__header-cell.cdk-header-cell.cdk-column-dateString.mat-column-dateString', timeout=5000)
                     except TimeoutError:
                         Timeout_flag = True
                         break
