@@ -5,3 +5,5 @@ Set weather station IDs (usually four-digit letters) on stationids.text and desi
 Make sure to run pip install -r requirements.txt and playwright install to get the chromium scraper to work.
 
 Terminal will prompt you for minimum time interval between data entries. That way you can choose data points that are at least 30 minutes apart, 60 minutes apart, etc.
+
+Compiled heatmaps made using SNS are here: https://drive.google.com/drive/folders/1DtHTX7EwqicBnngh3Wgi6ylhz-Y0j6Nu?usp=drive_link
